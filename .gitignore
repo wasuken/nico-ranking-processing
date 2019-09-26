@@ -2,3 +2,4 @@ Gopkg.lock
 vendor/
 nico-ranking-processing
 *.csv
+*.png
