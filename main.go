@@ -189,10 +189,7 @@ func graph(vals []chart.Value, savepath, title string) {
 		Height: 512,
 		XAxis:  chart.StyleShow(),
 		YAxis: chart.YAxis{
-			Style: chart.StyleShow(),
-			// TickStyle: chart.Style{
-			//  TextRotationDegrees: 45.0,
-			// },
+			Style:     chart.StyleShow(),
 			NameStyle: chart.Style{Show: true},
 		},
 		Bars: vals,
@@ -207,6 +204,7 @@ func main() {
 	app.Name = "nico-ranking-processing"
 	app.Usage = "my niconico api processing tool"
 	app.Version = "0.0.1"
+	nijisanji_url := "https://nijisanji.ichikara.co.jp/member/"
 
 	app.Commands = []cli.Command{
 		{
@@ -214,7 +212,7 @@ func main() {
 			Aliases: []string{},
 			Usage:   "get liver names",
 			Action: func(c *cli.Context) error {
-				nm, e := getLiverNames("https://nijisanji.ichikara.co.jp/member/")
+				nm, e := getLiverNames(nijisanji_url)
 				if e != nil {
 					panic("failed get name")
 				}
@@ -229,7 +227,7 @@ func main() {
 			Aliases: []string{},
 			Usage:   "get liver names and save csv",
 			Action: func(c *cli.Context) error {
-				nm, e := getLiverNames("https://nijisanji.ichikara.co.jp/member/")
+				nm, e := getLiverNames(nijisanji_url)
 				if e != nil {
 					panic("failed get name")
 				}
@@ -276,15 +274,14 @@ func main() {
 						delptr = i
 					} else {
 						v_s := fmt.Sprintf("%f", v.Value)
-						// v_ratio := fmt.Sprintf("%f", ((v.Value / total) * 100))
-						// vals[i].Label += "\n" + v_ratio + "%"
+						vals[i].Label += "\n" + v_s
 						fmt.Println(v.Label + ":" + v_s)
 					}
 				}
 				if delptr >= 0 {
 					vals = append(vals[:delptr], vals[delptr+1:]...)
 				}
-				graph(vals, "result.png", "liver cuts top 5")
+				graph(vals, "liver_cuts_top_10.png", "liver cuts top 10")
 				return nil
 			},
 		},
