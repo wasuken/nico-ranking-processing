@@ -251,7 +251,7 @@ func main() {
 			Usage:   "create graph",
 			Action: func(c *cli.Context) error {
 				querypaths := []string{}
-				for _, path := range c.Args()[1 : c.NArg()-2] {
+				for _, path := range c.Args()[0:(c.NArg() - 1)] {
 					usr, _ := user.Current()
 					querypath := strings.Replace(path, "~", usr.HomeDir, 1)
 					querypaths = append(querypaths, querypath)
@@ -267,7 +267,9 @@ func main() {
 						total += v.Value
 					}
 				}
-				vals = vals[0:11]
+				if len(vals) > 10 {
+					vals = vals[0:11]
+				}
 				delptr := -1
 				for i, v := range vals {
 					if v.Label == "other" {
